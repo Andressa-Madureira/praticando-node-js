@@ -31,6 +31,22 @@ app.post('/usuarios', async (req, response) =>{//listar usuarios
     response.status(201).json(user)
 }) 
 
+app.put('/usuarios/:id', async (req, response) =>{//listar usuarios
+  
+    req.params.id
+    const user =  await prisma.user.update({
+        where: {
+            id: req.params.id
+        },
+          data:{
+              email: req.body.email,
+              age: req.body.age,
+              name: req.body.name
+          }
+      })
+  
+      response.status(200).json(user)
+  }) 
 
 app.listen(3000)
 //req - > requisição
