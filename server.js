@@ -1,21 +1,35 @@
 //importar o express
 import express, { request, response } from 'express'
 
+import { PrismaClient } from '@prisma/client'
+
+const prisma = new PrismaClient()
+
 const app = express()
 app.use(express.json())
 //Criando a primeira rota
 
 const users = []
 
-app.get('/usuarios/', (req, res) =>{//listar usuarios
+app.get('/usuarios/', async (req, res) =>{//listar usuarios
+
+
+    const users = await prisma.user.findMany()
         res.status(200).json(users)
 }) 
 
-app.post('/usuarios', (req, response) =>{//listar usuarios
-    users.push(req.body)
-    response.status(201).json({message:"Usuário cadastro com sucesso"})
-}) 
+app.post('/usuarios', async (req, response) =>{//listar usuarios
+  
+  const user =  await prisma.user.create({
+        data:{
+            email: req.body.email,
+            age: req.body.age,
+            name: req.body.name
+        }
+    })
 
+    response.status(201).json(user)
+}) 
 
 
 app.listen(3000)
